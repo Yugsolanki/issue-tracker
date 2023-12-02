@@ -4,9 +4,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import React from "react";
 import Navbar from "./Navbar";
+import QueryClientProvider from "./QueryClientProvider";
+import AuthProvider from "./auth/Provider";
 import "./globals.css";
 import "./theme-config.css";
-import AuthProvider from "./auth/Provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,15 +28,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.variable}>
-        <AuthProvider>
-          <Theme appearance="light" accentColor="violet">
-            <Navbar />
-            <main className="p-5">
-              <Container>{children}</Container>
-            </main>
-            {/* <ThemePanel /> */}
-          </Theme>
-        </AuthProvider>
+        <QueryClientProvider>
+          <AuthProvider>
+            <Theme appearance="light" accentColor="violet">
+              <Navbar />
+              <main className="p-5">
+                <Container>{children}</Container>
+              </main>
+              {/* <ThemePanel /> */}
+            </Theme>
+          </AuthProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
