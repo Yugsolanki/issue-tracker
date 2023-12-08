@@ -26,19 +26,21 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
 
   if (isLoading) return <Skeleton />;
 
+  const assignIssue = async (userId: string) => {
+    axios
+      .patch(`/api/issues/${issue.id}`, {
+        assignedToUserId: userId === "Unassigned" ? null : userId,
+      })
+      .catch(() => {
+        toast.error("Failed to update issue");
+      });
+  };
+
   return (
     <>
       <Select.Root
         defaultValue={issue.assignedToUserId || "Unassigned"}
-        onValueChange={(userId) => {
-          axios
-            .patch(`/api/issues/${issue.id}`, {
-              assignedToUserId: userId === "Unassigned" ? null : userId,
-            })
-            .catch(() => {
-              toast.error("Failed to update issue");
-            });
-        }}
+        onValueChange={assignIssue}
       >
         <Select.Trigger placeholder="Assign..."></Select.Trigger>
         <Select.Content>
